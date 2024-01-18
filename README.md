@@ -1,5 +1,5 @@
 # SolML
-Rust Machine Learning Templates for Solana Data to help increase adoption of Rust with machine learning
+Rust machine learning script for Solana data to help increase adoption of Rust with machine learning
 
 ## Table of Contents
 - [Introduction](#introduction)
