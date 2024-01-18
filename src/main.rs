@@ -29,7 +29,7 @@ async fn main() -> Result<(), reqwest::Error> {
     // Apply Linfa algorithms
     // 1. Reduction using PCA
     let pca_model = linfa::pca().fit(&dataset).unwrap();
-    let reduced_data = pca_model.transform(&dataset).unwrap();
+    let reduced_data = pca_model.transform(&dataset.records()).unwrap();
     println!("Reduced Data: {:?}", reduced_data);
 
     // 2. Logistic Regression
@@ -49,3 +49,4 @@ async fn fetch_solana_data(endpoint: &str) -> Result<Vec<SolanaData>, reqwest::E
     let response = reqwest::get(endpoint).await?.json::<Vec<SolanaData>>().await?;
     Ok(response)
 }
+
