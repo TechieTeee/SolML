@@ -55,6 +55,3 @@ Developers can benefit from SolML in the following ways:
 
 ## Contributing
 If you'd like to contribute to SolML, please feel free to do so.
-
-## License
-This project is licensed under the [MIT License](LICENSE).
