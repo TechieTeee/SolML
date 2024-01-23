@@ -23,6 +23,11 @@ The project aims to provide insights into Solana blockchain data using machine l
 - Linfa
 - Reqwest
 
+## Models Offered
+-Reduction
+-Logistic Regression
+-K-Means
+
 ## Applications for Real World Use Cases
 SolML can be used to analyze and understand various aspects of the Solana blockchain. Potential real-world use cases include:
 - Assessing wealth concentration in the network
