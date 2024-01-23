@@ -9,7 +9,6 @@ Rust machine learning script for Solana data to help increase adoption of Rust w
 - [How it Can Help Developers](#how-it-can-help-developers)
 - [How to Run the Script](#how-to-run-the-script)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 SolML is a machine learning project that leverages Solana blockchain data for analysis and model training. It applies machine learning to perform various algorithms on Solana data.
