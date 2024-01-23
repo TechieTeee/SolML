@@ -26,6 +26,10 @@ async fn assess_solana_health(client: &RpcClient) -> Result<(), Box<dyn Error>> 
     println!("- Overall balance: {}", balance);
     println!("- Largest SOL accounts: {:?}", largest_accounts);
 
+    // Properly close the async block
+    Ok(())
+}
+
 async fn fetch_solana_data(endpoint: &str) -> Result<Vec<SolanaData>, reqwest::Error> {
     let response = reqwest::get(endpoint).await?.json::<Vec<SolanaData>>().await?;
     Ok(response)
@@ -73,6 +77,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let kmeans_model = linfa::kmeans(3).fit(&dataset).unwrap();
     let labels_kmeans = kmeans_model.predict(&dataset.records());
     println!("K-Means Labels: {:?}", labels_kmeans);
+
     // Establish connection to Solana RPC node
     let solana_rpc_url = "https://api.mainnet-beta.solana.com".to_string();
     let solana_client = RpcClient::new(solana_rpc_url);
