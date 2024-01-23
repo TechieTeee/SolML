@@ -22,7 +22,7 @@ The project aims to provide insights into Solana blockchain data using machine l
 - Linfa
 - Reqwest
 
-## Models Offered
+## Current Algorithms Offered
 - Reduction
 - Logistic Regression
 - K-Means
