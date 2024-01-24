@@ -1,6 +1,6 @@
 use dotenv::dotenv;
+use isahc;
 use linfa::prelude::*;
-use reqwest;
 use serde::{Deserialize, Serialize};
 use solana_client::rpc_client::RpcClient;
 use solana_sdk::commitment_config::CommitmentConfig;
@@ -30,9 +30,10 @@ async fn assess_solana_health(client: &RpcClient) -> Result<(), Box<dyn Error>> 
     Ok(())
 }
 
-async fn fetch_solana_data(endpoint: &str) -> Result<Vec<SolanaData>, reqwest::Error> {
-    let response = reqwest::get(endpoint).await?.json::<Vec<SolanaData>>().await?;
-    Ok(response)
+async fn fetch_solana_data(endpoint: &str) -> Result<Vec<SolanaData>, isahc::Error> {
+    let response = isahc::get(endpoint)?.text()?;
+    let solana_data: Vec<SolanaData> = serde_json::from_str(&response)?;
+    Ok(solana_data)
 }
 
 #[tokio::main]
