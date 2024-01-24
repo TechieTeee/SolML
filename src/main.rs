@@ -1,7 +1,6 @@
 use dotenv::dotenv;
 use isahc;
 use linfa::prelude::*;
-use serde::{Deserialize, Serialize};
 use solana_client::rpc_client::RpcClient;
 use solana_sdk::commitment_config::CommitmentConfig;
 use solana_sdk::signature::Signature;
@@ -58,8 +57,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .flatten()
         .collect();
 
-    // Determine appropriate labels based on your analysis goals
-    let labels: Vec<f64> = solana_data.iter().map(|data| /* Extract labels */).collect();
+    // Extract labels based on your analysis goals
+    let labels: Vec<f64> = solana_data.iter().map(|data| data.balance as f64).collect();
 
     let dataset = Dataset::new(features, labels);
 
