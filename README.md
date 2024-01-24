@@ -18,6 +18,7 @@ The project aims to provide insights into Solana blockchain data using machine l
 
 ## Tech Stack
 - Rust
+- Solana Client
 - Quicknode Solana API
 - Linfa
 - Reqwest
