@@ -6,6 +6,7 @@ use solana_sdk::commitment_config::CommitmentConfig;
 use solana_sdk::signature::Signature;
 use std::env;
 use std::error::Error;
+use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 struct SolanaData {
