@@ -9,6 +9,7 @@ edition = "2021"
 linfa = "0.7.0"
 linfa-clustering = "0.7.0"
 linfa-reduction = "0.7.0"
+linfa-logistic = "0.7.0"
 isahc = "1.4.1" 
 tokio = { version = "1", features = ["full"] }
 dotenv = "0.15.0"
