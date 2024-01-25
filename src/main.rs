@@ -4,7 +4,6 @@ use linfa::prelude::*;
 use linfa_clustering::{KMeans};
 use linfa_reduction::Pca;
 use solana_client::rpc_client::RpcClient;
-use solana_sdk::signature::Signature;
 use std::env;
 use std::error::Error;
 use serde::Deserialize;
@@ -26,12 +25,11 @@ async fn assess_solana_health(client: &RpcClient) -> Result<(), Box<dyn Error>> 
     // 1. Wealth Concentration Assessment
     let balance = client.get_balance(&Pubkey::new(&[0u8; 64]))?;
     let token = "SOL";
-    let largest_accounts = client.get_token_largest_accounts(&Pubkey)?;
+    let largest_accounts = client.get_token_largest_accounts(&Pubkey::new(&[0u8; 64]))?;
     println!("Wealth Concentration:");
     println!("- Overall balance: {}", balance);
     println!("- Largest SOL accounts: {:?}", largest_accounts);
 
-    // Properly close the async block
     Ok(())
 }
 
