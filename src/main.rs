@@ -1,12 +1,15 @@
 use dotenv::dotenv;
 use isahc;
 use linfa::prelude::*;
+use linfa_clustering::{KMeans};
+use linfa_reduction::Pca;
 use solana_client::rpc_client::RpcClient;
 use solana_sdk::signature::Signature;
 use std::env;
 use std::error::Error;
 use serde::Deserialize;
 use isahc::ReadResponseExt;
+use solana_sdk::pubkey::Pubkey;
 
 
 #[derive(Debug, Deserialize)]
@@ -21,9 +24,9 @@ struct SolanaData {
 
 async fn assess_solana_health(client: &RpcClient) -> Result<(), Box<dyn Error>> {
     // 1. Wealth Concentration Assessment
-    let balance = client.get_balance(&Signature::from([0u8; 64]))?;
+    let balance = client.get_balance(&Pubkey::new(&[0u8; 64]))?;
     let token = "SOL";
-    let largest_accounts = client.get_token_largest_accounts(&token, 10)?;
+    let largest_accounts = client.get_token_largest_accounts(&Pubkey)?;
     println!("Wealth Concentration:");
     println!("- Overall balance: {}", balance);
     println!("- Largest SOL accounts: {:?}", largest_accounts);
@@ -67,7 +70,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // Apply Linfa algorithms
     // 1. Reduction using PCA
-    let pca_model = PCA::fit(&dataset).unwrap();
+    let pca_model = Pca::fit(&dataset).unwrap();
     let reduced_data = pca_model.transform(&dataset).unwrap();
     println!("Reduced Data: {:?}", reduced_data);
 
