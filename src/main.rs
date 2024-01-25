@@ -22,7 +22,7 @@ struct SolanaData {
 
 async fn assess_solana_health(client: &RpcClient) -> Result<(), Box<dyn Error>> {
     // 1. Wealth Concentration Assessment
-    let balance = client.get_balance(&Signature::from(&[0; 64]))?;
+    let balance = client.get_balance(&Signature::from([0u8; 64]))?;
     let largest_accounts = client.get_token_largest_accounts(/* &Pubkey */)?;
     println!("Wealth Concentration:");
     println!("- Overall balance: {}", balance);
