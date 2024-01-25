@@ -22,7 +22,7 @@ The project aims to provide insights into Solana blockchain data using machine l
 - Solana SDK
 - Quicknode Solana API
 - Linfa
-- Reqwest
+- Isahc
 
 ## Current Algorithms Offered
 - Reduction
