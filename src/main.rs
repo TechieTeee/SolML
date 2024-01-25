@@ -9,7 +9,6 @@ use serde::Deserialize;
 use isahc::ReadResponseExt;
 
 
-
 #[derive(Debug, Deserialize)]
 struct SolanaData {
     balance: u64,
@@ -23,7 +22,8 @@ struct SolanaData {
 async fn assess_solana_health(client: &RpcClient) -> Result<(), Box<dyn Error>> {
     // 1. Wealth Concentration Assessment
     let balance = client.get_balance(&Signature::from([0u8; 64]))?;
-    let largest_accounts = client.get_token_largest_accounts(/* &Pubkey */)?;
+    let token = "SOL";
+    let largest_accounts = client.get_token_largest_accounts(&token, 10)?;
     println!("Wealth Concentration:");
     println!("- Overall balance: {}", balance);
     println!("- Largest SOL accounts: {:?}", largest_accounts);
@@ -34,7 +34,7 @@ async fn assess_solana_health(client: &RpcClient) -> Result<(), Box<dyn Error>> 
 
 async fn fetch_solana_data(endpoint: &str) -> Result<Vec<SolanaData>, isahc::Error> {
     let response = isahc::get(endpoint)?.text()?;
-    let solana_data: Vec<SolanaData> = serde_json::from_str(&response)?;
+    let solana_data: Vec<SolanaData> = serde_json::from_str(&response).expect("Failed to parse JSON");
     Ok(solana_data)
 }
 
@@ -62,8 +62,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // Extract labels based on your analysis goals
     let labels: Vec<f64> = solana_data.iter().map(|data| data.balance as f64).collect();
+    let dataset = Dataset::new(features, labels.into());
 
-    let dataset = Dataset::new(features, labels);
 
     // Apply Linfa algorithms
     // 1. Reduction using PCA
