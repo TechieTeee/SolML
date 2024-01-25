@@ -1,14 +1,16 @@
 use dotenv::dotenv;
-use isahc;
 use linfa::prelude::*;
-use linfa_clustering::{KMeans};
+use linfa::linear_model::logistic::LogisticRegression;
+use linfa::traits::Transformer;
 use linfa_reduction::Pca;
+use linfa_clustering::KMeans;
 use solana_client::rpc_client::RpcClient;
 use std::env;
 use std::error::Error;
 use serde::Deserialize;
 use isahc::ReadResponseExt;
 use solana_sdk::pubkey::Pubkey;
+use ndarray::{arr1, Array1, Array2, stack, Axis, ArrayView1};
 
 
 #[derive(Debug, Deserialize)]
@@ -45,7 +47,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     dotenv().ok();
 
     // Retrieve the QuickNode endpoint from the environment variable
-    let quicknode_endpoint = env::var("QUICKNODE_ENDPOINT").expect("QUICKNODE_ENDPOINT not set in .env file");
+    let quicknode_endpoint =
+        env::var("QUICKNODE_ENDPOINT").expect("QUICKNODE_ENDPOINT not set in .env file");
 
     // Fetch Solana data
     let solana_data: Vec<SolanaData> = fetch_solana_data(&quicknode_endpoint).await?;
@@ -61,10 +64,25 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .flatten()
         .collect();
 
+    // Create features_array
+    let mut features_array = Vec::new();
+    for chunk in features.chunks(3) {
+        features_array.push(arr1(chunk));
+    }
+
+    // Convert to Vec<ArrayView1<f64>>
+    let features_array: Vec<ArrayView1<f64>> = features_array.iter().map(|a| a.view()).collect();
+
+    // Stack arrays along Axis(0)
+    let features_array: Array2<f64> =
+        stack(Axis(0), features_array.iter().map(|a| a.view()).collect::<Vec<_>>().as_slice()).unwrap();
+
+
     // Extract labels based on your analysis goals
     let labels: Vec<f64> = solana_data.iter().map(|data| data.balance as f64).collect();
-    let dataset = Dataset::new(features, labels.into());
 
+    // Create dataset
+    let dataset = Dataset::new(features_array.clone(), arr1(&labels));
 
     // Apply Linfa algorithms
     // 1. Reduction using PCA
@@ -91,4 +109,3 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
-
