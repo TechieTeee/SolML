@@ -1,16 +1,17 @@
 use dotenv::dotenv;
 use linfa::prelude::*;
-use linfa::linear_model::logistic::LogisticRegression;
-use linfa::traits::Transformer;
 use linfa_reduction::Pca;
-use linfa_clustering::KMeans;
+use linfa_clustering::{KMeans};
+use linfa_logistic::LogisticRegression;
 use solana_client::rpc_client::RpcClient;
 use std::env;
 use std::error::Error;
 use serde::Deserialize;
 use isahc::ReadResponseExt;
 use solana_sdk::pubkey::Pubkey;
-use ndarray::{arr1, Array1, Array2, stack, Axis, ArrayView1};
+use ndarray::{arr1, Array2, stack, Axis, ArrayView1};
+use linfa::traits::Fit;
+
 
 
 #[derive(Debug, Deserialize)]
@@ -26,7 +27,6 @@ struct SolanaData {
 async fn assess_solana_health(client: &RpcClient) -> Result<(), Box<dyn Error>> {
     // 1. Wealth Concentration Assessment
     let balance = client.get_balance(&Pubkey::new(&[0u8; 64]))?;
-    let token = "SOL";
     let largest_accounts = client.get_token_largest_accounts(&Pubkey::new(&[0u8; 64]))?;
     println!("Wealth Concentration:");
     println!("- Overall balance: {}", balance);
@@ -85,20 +85,27 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let dataset = Dataset::new(features_array.clone(), arr1(&labels));
 
     // Apply Linfa algorithms
-    // 1. Reduction using PCA
-    let pca_model = Pca::fit(&dataset).unwrap();
-    let reduced_data = pca_model.transform(&dataset).unwrap();
+    // 1. Reduction using PCA (generic wrapper for open-ended output type)
+    fn my_pca<T: linfa::Float>(dataset: &Dataset<T>) -> Result<Pca<T>, Box<dyn Error>> {
+        Pca::<T>::fit::<_, _, _>(dataset)
+    }
+
+    let pca_model = my_pca(&dataset)?; // Use the generic wrapper
+    let reduced_data = pca_model.transform(&dataset)?;
     println!("Reduced Data: {:?}", reduced_data);
 
-    // 2. Logistic Regression
-    let logistic_regression_model = LogisticRegression::fit(&dataset).unwrap();
-    let prediction_lr = logistic_regression_model.predict(&dataset.records());
+    // 2. Logistic Regression (using predict on the model instance)
+    let logistic_regression_model = LogisticRegression::default()
+        .max_iterations(150)
+        .fit(&dataset)?;
+    let prediction_lr = logistic_regression_model.predict(&dataset.records())?;
     println!("Logistic Regression Prediction: {:?}", prediction_lr);
 
-    // 3. K-Means clustering
-    let kmeans_model = KMeans::new(3).fit(&dataset).unwrap();
+    // 3. K-Means clustering (using the new constructor)
+    let kmeans_model = KMeans::new(3).fit(&dataset)?;
     let labels_kmeans = kmeans_model.predict(&dataset.records());
     println!("K-Means Labels: {:?}", labels_kmeans);
+    
 
     // Establish connection to Solana RPC node
     let solana_rpc_url = "https://api.mainnet-beta.solana.com".to_string();
