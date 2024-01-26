@@ -13,7 +13,6 @@ use ndarray::{arr1, Array2, stack, Axis, ArrayView1};
 use linfa::traits::Fit;
 
 
-
 #[derive(Debug, Deserialize)]
 struct SolanaData {
     balance: u64,
@@ -51,6 +50,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         env::var("QUICKNODE_ENDPOINT").expect("QUICKNODE_ENDPOINT not set in .env file");
 
     // Fetch Solana data
+    // Choose what Solana, data endpoints you want to use from Quicknode
+    // Check out the endpoints available in the Quicknode documentation
     let solana_data: Vec<SolanaData> = fetch_solana_data(&quicknode_endpoint).await?;
 
     // Convert SolanaData to a linfa dataset
@@ -78,29 +79,34 @@ async fn main() -> Result<(), Box<dyn Error>> {
         stack(Axis(0), features_array.iter().map(|a| a.view()).collect::<Vec<_>>().as_slice()).unwrap();
 
     // Extract labels based on your analysis goals
-    let labels: Vec<f64> = solana_data.iter().map(|data| data.balance as f64).collect();
+    let labels: Vec<usize> = solana_data.iter().map(|data| data.balance as usize).collect();
 
-    // Create dataset
+    // Create Dataset
     let dataset = Dataset::new(features_array.clone(), arr1(&labels));
 
-    // Apply Linfa algorithms
-    // 1. Decision Tree
-    let decision_tree_model = DecisionTree::params().max_depth(5).build()?;
-        .fit(&dataset)?;
-    let prediction_dt = decision_tree_model.predict(&dataset.records())?;
-    println!("Decision Tree Prediction: {:?}", prediction_dt);
+    // Apply Linfa algorithms based on user preferences
+     // Set to true or false based on whether you want to use this algorithm
+    let enable_decision_tree = true;
+    if enable_decision_tree {
+        let decision_tree_model = DecisionTree::params().fit(&dataset)?;
+        println!("Decision Tree Prediction: {:?}", decision_tree_model);
+    }
 
-    // 2. Logistic Regression (using predict on the model instance)
-    let logistic_regression_model = LogisticRegression::default()
-        .max_iterations(150)
-        .fit(&dataset)?;
-    let prediction_lr = logistic_regression_model.predict(&dataset.records())?;
-    println!("Logistic Regression Prediction: {:?}", prediction_lr);
+     // Set to true or false based on whether you want to use this algorithm
+    let enable_logistic_regression = true;
+    if enable_logistic_regression {
+        let logistic_regression_model = LogisticRegression::default()
+            .max_iterations(150)
+            .fit(&dataset)?;
+        println!("Logistic Regression Prediction: {:?}", logistic_regression_model);
+    }
 
-    // 3. K-Means clustering (using the new constructor)
-    let kmeans_model = KMeans::new(3).fit(&dataset)?;
-    let labels_kmeans = kmeans_model.predict(&dataset.records());
-    println!("K-Means Labels: {:?}", labels_kmeans);
+     // Set to true or false based on whether you want to use this algorithm
+    let enable_kmeans = true; 
+    if enable_kmeans {
+        let kmeans_model = KMeans::params(3).fit(&dataset)?;
+        println!("K-Means Labels: {:?}", kmeans_model);
+    }
 
     // Establish connection to Solana RPC node
     let solana_rpc_url = "https://api.mainnet-beta.solana.com".to_string();
