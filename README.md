@@ -25,7 +25,7 @@ The project aims to provide insights into Solana blockchain data using machine l
 - Isahc
 
 ## Current Algorithms Offered
-- Reduction
+- Decision Tree
 - Logistic Regression
 - K-Means
 
