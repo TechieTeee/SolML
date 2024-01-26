@@ -1,20 +1,21 @@
 # SolML
-Rust machine learning script for Solana data to help increase adoption of Rust with machine learning
+Rust machine learning script for Solana data to facilitate the integration of Rust with machine learning.
 
 ## Table of Contents
 - [Introduction](#introduction)
 - [Purpose](#purpose)
 - [Tech Stack](#tech-stack)
-- [Applications for Real World Use Cases](#applications-for-real-world-use-cases)
+- [Available Algorithms](#available-algorithms)
+- [Applications for Real-World Use Cases](#applications-for-real-world-use-cases)
 - [How it Can Help Developers](#how-it-can-help-developers)
 - [How to Run the Script](#how-to-run-the-script)
 - [Contributing](#contributing)
 
 ## Introduction
-SolML is a machine learning project that leverages Solana blockchain data for analysis and model training. It applies machine learning to perform various algorithms on Solana data.
+SolML is a Rust-based machine learning project designed for analyzing Solana blockchain data. It leverages various machine learning algorithms to provide insights and patterns from the Solana network.
 
 ## Purpose
-The project aims to provide insights into Solana blockchain data using machine learning techniques. It explores wealth concentration, decentralization, security, and performance aspects of the Solana network and make it easier for Solana/Rust developers to develop and run machine learning models.
+The primary goal of this project is to empower Solana and Rust developers with tools to explore and understand Solana blockchain data through machine learning. SolML focuses on aspects such as wealth concentration, decentralization, security, and network performance.
 
 ## Tech Stack
 - Rust
@@ -24,22 +25,27 @@ The project aims to provide insights into Solana blockchain data using machine l
 - Linfa
 - Isahc
 
-## Current Algorithms Offered
-- Decision Tree
-- Logistic Regression
-- K-Means
+## Available Algorithms
+### 1. Decision Tree
+Decision Trees are used for predictive modeling. They work well for classification tasks and provide a clear visualization of decision-making processes.
 
-## Applications for Real World Use Cases
-SolML can be used to analyze and understand various aspects of the Solana blockchain. Potential real-world use cases include:
-- Assessing wealth concentration in the network
+### 2. Logistic Regression
+Logistic Regression is commonly used for binary classification tasks. It's effective for understanding the relationship between independent and dependent variables.
+
+### 3. K-Means Clustering
+K-Means is an unsupervised learning algorithm used for clustering. It's beneficial for identifying patterns and grouping similar data points.
+
+## Applications for Real-World Use Cases
+SolML can be applied to various real-world scenarios, including:
+- Assessing wealth distribution within the Solana network
 - Analyzing decentralization through cluster nodes and slot leaders
-- Evaluating network health, security, and performance
+- Evaluating network health, security, and performance metrics
 
 ## How it Can Help Developers
-Developers can benefit from SolML in the following ways:
-- Gain insights into Solana blockchain data using machine learning
-- Understand patterns in wealth distribution, decentralization, and network health
-- Use machine learning models for predictive analysis based on Solana data
+Developers can utilize SolML to:
+- Gain valuable insights from Solana blockchain data through machine learning techniques
+- Understand patterns related to wealth distribution, decentralization, and network health
+- Employ machine learning models for predictive analysis based on Solana data
 
 ## How to Run the Script
 ### Prerequisites
@@ -55,4 +61,4 @@ Developers can benefit from SolML in the following ways:
 2. Run the script: `cargo run`
 
 ## Contributing
-If you'd like to contribute to SolML, please feel free to do so.
+Contributions to SolML are welcome! Feel free to contribute by forking the repository and creating pull requests.
